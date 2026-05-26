@@ -118,12 +118,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchMinecraft() {
-        // 1. Abrir Minecraft Trial (Prioridad)
+        // 1. Intentar inyectar y cargar Minecraft Trial (Prioridad)
         if (com.minecraft.launcher.utils.SecurityUtils.isPackageInstalled(this, MINECRAFT_TRIAL_PKG)) {
-            Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_TRIAL_PKG);
-            if (intent != null) {
-                Toast.makeText(this, "Opening Minecraft Trial...", Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+            boolean success = com.minecraft.launcher.utils.MinecraftLoader.injectMinecraft(this);
+            if (success) {
+                Toast.makeText(this, "Minecraft Trial Injected Successfully!", Toast.LENGTH_SHORT).show();
+            } else {
+                // Fallback tradicional para Trial si la inyección falla
+                Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_TRIAL_PKG);
+                if (intent != null) startActivity(intent);
             }
             if (latestUpdateData != null) showNotificationOverlay();
             return;

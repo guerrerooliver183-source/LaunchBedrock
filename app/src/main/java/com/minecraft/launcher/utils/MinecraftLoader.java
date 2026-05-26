@@ -16,23 +16,25 @@ public class MinecraftLoader {
             PackageManager pm = context.getPackageManager();
             ApplicationInfo appInfo = pm.getApplicationInfo(MINECRAFT_PKG, 0);
             
-            // 1. Obtener la ruta del APK y las librerías nativas
-            String apkPath = appInfo.sourceDir;
             String nativeLibDir = appInfo.nativeLibraryDir;
-            
-            Log.d(TAG, "Inyectando Minecraft desde: " + apkPath);
-            Log.d(TAG, "Directorio de librerías: " + nativeLibDir);
+            Log.d(TAG, "Detectando arquitectura del sistema: " + android.os.Build.SUPPORTED_ABIS[0]);
+            Log.d(TAG, "Directorio de librerías de Minecraft: " + nativeLibDir);
 
-            // 2. Cargar las librerías principales de Minecraft dinámicamente
-            // En una implementación real tipo Geode, aquí cargaríamos nuestro propio "core.so"
-            // que a su vez cargaría "libminecraftpe.so" y aplicaría los parches.
+            // Intentar cargar la librería principal de Minecraft
+            // Nota: En Android 15, System.load puede fallar si la librería no tiene los permisos correctos
+            // o si hay una discrepancia de arquitectura (32-bit vs 64-bit).
             File libMinecraft = new File(nativeLibDir, "libminecraftpe.so");
+            
             if (libMinecraft.exists()) {
+                Log.d(TAG, "Intentando carga nativa de: " + libMinecraft.getAbsolutePath());
+                
+                // Intentamos la carga. Si esto causa un crash, es por protección del kernel de Android.
                 System.load(libMinecraft.getAbsolutePath());
-                Log.d(TAG, "Librería de Minecraft cargada exitosamente.");
+                
+                Log.d(TAG, "¡INYECCIÓN EXITOSA! La librería de Minecraft ha sido cargada en el proceso.");
                 return true;
             } else {
-                Log.e(TAG, "No se encontró libminecraftpe.so");
+                Log.e(TAG, "ERROR: No se encontró libminecraftpe.so en " + nativeLibDir);
                 return false;
             }
 
@@ -40,7 +42,8 @@ public class MinecraftLoader {
             Log.e(TAG, "Minecraft Trial no está instalado.");
             return false;
         } catch (UnsatisfiedLinkError e) {
-            Log.e(TAG, "Error al cargar librerías nativas: " + e.getMessage());
+            Log.e(TAG, "CRASH EVITADO: Error de enlace nativo. Probablemente incompatibilidad de arquitectura o protección de Android 15.");
+            Log.e(TAG, "Detalle: " + e.getMessage());
             return false;
         } catch (Exception e) {
             Log.e(TAG, "Error inesperado durante la inyección: " + e.getMessage());
