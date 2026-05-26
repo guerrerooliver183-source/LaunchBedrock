@@ -35,26 +35,46 @@
                 android:textColor="?attr/colorPrimary"
                 android:layout_marginBottom="8dp" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switch_theme"
+            <!-- Fila del Tema (Selector de Diálogo) -->
+            <RelativeLayout
+                android:id="@+id/theme_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/theme"
-                android:padding="8dp" />
+                android:padding="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/theme_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/theme"
+                    android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+                <TextView
+                    android:id="@+id/theme_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/system_default"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?attr/colorSecondary" />
+            </RelativeLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switch_black_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/black_background"
-                android:padding="8dp" />
+                android:padding="16dp" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switch_disable_custom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/disable_custom_style"
-                android:padding="8dp" />
+                android:padding="16dp" />
 
             <TextView
                 android:id="@+id/btn_change_name"
@@ -79,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/hide_original_app"
-                android:padding="8dp" />
+                android:padding="16dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -102,14 +122,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/auto_start"
                 android:checked="true"
-                android:padding="8dp" />
+                android:padding="16dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/auto_start_desc"
                 android:textAppearance="?attr/textAppearanceBodySmall"
-                android:paddingHorizontal="8dp" />
+                android:paddingHorizontal="16dp" />
 
         </LinearLayout>
     </ScrollView>

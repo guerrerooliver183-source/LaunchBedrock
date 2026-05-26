@@ -31,10 +31,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        prefs = getSharedPreferences("settings", MODE_PRIVATE);
+        int themeMode = prefs.getInt("theme_mode", androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(themeMode);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        prefs = getSharedPreferences("settings", MODE_PRIVATE);
         statusText = findViewById(R.id.status_text);
         progress1 = findViewById(R.id.progress_segment_1);
         progress2 = findViewById(R.id.progress_segment_2);
