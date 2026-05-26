@@ -30,13 +30,20 @@ public class UpdateInfoActivity extends AppCompatActivity {
         TextView changelogText = findViewById(R.id.changelog_content);
         Button installButton = findViewById(R.id.btn_install_update);
 
+        String downloadUrl = getIntent().getStringExtra("download_url");
+
         if (version != null) versionText.setText("Version: " + version);
         if (date != null) dateText.setText("Published: " + date);
         if (changelog != null) changelogText.setText(changelog);
 
         installButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Starting installation...", Toast.LENGTH_SHORT).show();
-            // Lógica para descargar e instalar el APK
+            if (downloadUrl != null) {
+                Toast.makeText(this, "Opening download link...", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(downloadUrl));
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Download link not available", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

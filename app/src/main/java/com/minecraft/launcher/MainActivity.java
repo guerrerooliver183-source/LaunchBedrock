@@ -124,18 +124,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkForUpdates() {
-        UpdateChecker.checkForUpdates(new UpdateChecker.UpdateCallback() {
+        String currentVersion = "v1.0.0"; // Debe coincidir con el tag en GitHub
+        UpdateChecker.checkForUpdates(currentVersion, new UpdateChecker.UpdateCallback() {
             @Override
-            public void onUpdateFound(String version, String date, String changelog) {
-                showNotification(version, date, changelog);
+            public void onUpdateFound(String version, String date, String changelog, String downloadUrl) {
+                showNotification(version, date, changelog, downloadUrl);
             }
 
             @Override
             public void onNoUpdate() {}
+
+            @Override
+            public void onError(Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 
-    private void showNotification(String version, String date, String changelog) {
+    private void showNotification(String version, String date, String changelog, String downloadUrl) {
         notificationCard.setVisibility(View.VISIBLE);
         AlphaAnimation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setDuration(500);
@@ -146,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("version", version);
             intent.putExtra("date", date);
             intent.putExtra("changelog", changelog);
+            intent.putExtra("download_url", downloadUrl);
             startActivity(intent);
         });
 
