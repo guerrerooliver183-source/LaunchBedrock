@@ -68,6 +68,6 @@
         android:layout_height="60dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:src="@android:drawable/ic_menu_send" /> <!-- Aquí se pondría la imagen de Google Play -->
+        android:src="@drawable/google_play_badge" />
 
 </LinearLayout>
