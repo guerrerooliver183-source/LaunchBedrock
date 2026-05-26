@@ -52,7 +52,7 @@ jobs:
 
       # 5. Build both APK and AAB
       - name: Build APK (Debug) and AAB (Release)
-        run: ./gradlew assembleDebug bundleRelease
+        run: ./gradlew assembleDebug bundleRelease --stacktrace
 
       # 6. Prepare output directory and rename files
       - name: Prepare output files
