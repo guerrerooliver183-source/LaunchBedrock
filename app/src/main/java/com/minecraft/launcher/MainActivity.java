@@ -148,14 +148,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMinecraftNotFoundDialog() {
-        new AlertDialog.Builder(this)
-            .setTitle("Minecraft Trial Not Found")
-            .setMessage(R.string.trial_not_installed)
-            .setPositiveButton("Install Minecraft Trial", (d, w) -> {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MINECRAFT_TRIAL_PKG)));
-            })
-            .setNegativeButton("Exit", (d, w) -> finish())
-            .show();
+        Intent intent = new Intent(this, NotFoundActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void showNotificationOverlay() {

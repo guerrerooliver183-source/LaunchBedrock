@@ -36,6 +36,11 @@
             android:label="Update Information"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".NotFoundActivity"
+            android:label="Minecraft Not Found"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".OverlayService"
             android:enabled="true"

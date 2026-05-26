@@ -24,7 +24,8 @@
     <string name="gameplay">Gameplay</string>
     <string name="auto_start">Auto-start</string>
     <string name="auto_start_desc">Automatically start Minecraft after loading</string>
-    <string name="trial_not_installed">Minecraft Trial is not installed. Please download it first.</string>
+    <string name="minecraft_not_found_title">Minecraft cannot be used.</string>
+    <string name="minecraft_not_found_desc">Minecraft Trial was not found.\nThe trial version of the game is required.</string>
     <string name="recommend_hide">We recommend hiding the original application. Do you want to do it now?</string>
     <string name="dont_show_again">Don\'t show again</string>
 </resources>
