@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private CardView notificationCard;
     private SharedPreferences prefs;
     private final String MINECRAFT_TRIAL_PKG = "com.mojang.minecrafttrialpe";
+    private final String MINECRAFT_FULL_PKG = "com.mojang.minecraftpe";
     private String latestDownloadUrl;
     private Bundle latestUpdateData;
 
@@ -117,30 +118,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchMinecraft() {
-        // Intentar inyectar y cargar Minecraft dentro del launcher (estilo Geode)
+        // 1. Verificar si la versión completa está instalada
+        if (SecurityUtils.isPackageInstalled(this, MINECRAFT_FULL_PKG)) {
+            Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_FULL_PKG);
+            if (intent != null) {
+                Toast.makeText(this, "Opening Minecraft Full Version...", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+                if (latestUpdateData != null) showNotificationOverlay();
+                return;
+            }
+        }
+
+        // 2. Si no está la completa, intentar inyectar Minecraft Trial
         boolean success = com.minecraft.launcher.utils.MinecraftLoader.injectMinecraft(this);
         
         if (success) {
-            Toast.makeText(this, "Minecraft Injected Successfully!", Toast.LENGTH_SHORT).show();
-            
-            // Al estar inyectado, la notificación de actualización puede mostrarse
-            // directamente en esta misma actividad o como overlay nativo.
-            if (latestUpdateData != null) {
-                showNotificationOverlay();
-            }
-            
-            // Aquí se iniciaría la actividad nativa de Minecraft o se llamaría al main nativo
-            // Para propósitos de este launcher, hemos preparado el terreno para la inyección.
+            Toast.makeText(this, "Minecraft Trial Injected Successfully!", Toast.LENGTH_SHORT).show();
+            if (latestUpdateData != null) showNotificationOverlay();
         } else {
-            // Fallback: Si la inyección falla, intentamos el lanzamiento tradicional
+            // 3. Fallback: Lanzamiento tradicional de Trial si la inyección falla
             Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_TRIAL_PKG);
             if (intent != null) {
                 startActivity(intent);
                 if (latestUpdateData != null) showNotificationOverlay();
             } else {
-                Toast.makeText(this, "Could not launch or inject Minecraft", Toast.LENGTH_SHORT).show();
+                // 4. Si nada está instalado, mostrar aviso
+                showMinecraftNotFoundDialog();
             }
         }
+    }
+
+    private void showMinecraftNotFoundDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle("Minecraft Not Found")
+            .setMessage("Neither Minecraft Trial nor Full Version was found. Please download one.")
+            .setPositiveButton("Download Trial", (d, w) -> {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MINECRAFT_TRIAL_PKG)));
+            })
+            .setNegativeButton("Download Full", (d, w) -> {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MINECRAFT_FULL_PKG)));
+            })
+            .show();
     }
 
     private void showNotificationOverlay() {
