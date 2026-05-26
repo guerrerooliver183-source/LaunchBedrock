@@ -117,24 +117,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchMinecraft() {
-        Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_TRIAL_PKG);
-        if (intent != null) {
-            startActivity(intent);
-            // Si hay una actualización pendiente, mostrar el overlay sobre el juego
+        // Intentar inyectar y cargar Minecraft dentro del launcher (estilo Geode)
+        boolean success = com.minecraft.launcher.utils.MinecraftLoader.injectMinecraft(this);
+        
+        if (success) {
+            Toast.makeText(this, "Minecraft Injected Successfully!", Toast.LENGTH_SHORT).show();
+            
+            // Al estar inyectado, la notificación de actualización puede mostrarse
+            // directamente en esta misma actividad o como overlay nativo.
             if (latestUpdateData != null) {
-                if (android.provider.Settings.canDrawOverlays(this)) {
-                    Intent overlayIntent = new Intent(this, OverlayService.class);
-                    overlayIntent.putExtras(latestUpdateData);
-                    startService(overlayIntent);
-                } else {
-                    // Solicitar permiso si no lo tiene
-                    Intent overlayPermIntent = new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            android.net.Uri.parse("package:" + getPackageName()));
-                    startActivity(overlayPermIntent);
-                }
+                showNotificationOverlay();
             }
+            
+            // Aquí se iniciaría la actividad nativa de Minecraft o se llamaría al main nativo
+            // Para propósitos de este launcher, hemos preparado el terreno para la inyección.
         } else {
-            Toast.makeText(this, "Could not launch Minecraft", Toast.LENGTH_SHORT).show();
+            // Fallback: Si la inyección falla, intentamos el lanzamiento tradicional
+            Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_TRIAL_PKG);
+            if (intent != null) {
+                startActivity(intent);
+                if (latestUpdateData != null) showNotificationOverlay();
+            } else {
+                Toast.makeText(this, "Could not launch or inject Minecraft", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showNotificationOverlay() {
+        if (android.provider.Settings.canDrawOverlays(this)) {
+            Intent overlayIntent = new Intent(this, OverlayService.class);
+            overlayIntent.putExtras(latestUpdateData);
+            startService(overlayIntent);
+        } else {
+            Intent overlayPermIntent = new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    android.net.Uri.parse("package:" + getPackageName()));
+            startActivity(overlayPermIntent);
         }
     }
 
