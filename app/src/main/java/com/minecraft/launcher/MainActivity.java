@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         if (!SecurityUtils.isPackageInstalled(this, MINECRAFT_TRIAL_PKG)) {
             new AlertDialog.Builder(this)
                 .setTitle("Minecraft Trial Not Found")
-                .setMessage(R.string.trial_not_installed)
+                .setMessage(R.string.minecraft_not_found_desc)
                 .setPositiveButton("Download", (d, w) -> {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MINECRAFT_TRIAL_PKG));
                     startActivity(intent);
