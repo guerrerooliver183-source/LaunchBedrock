@@ -1,0 +1,73 @@
+name: Build Android
+
+# Trigger on push to main, pull requests to main, or manual run
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Reusable paths
+env:
+  APK_DEBUG_PATH: app/build/outputs/apk/debug/app-debug.apk
+  AAB_RELEASE_PATH: app/build/outputs/bundle/release/app-release.aab
+
+jobs:
+  build:
+    name: Generate APK and AAB + ZIP
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Java
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      # 3. (OPTIONAL) Sign build for Google Play release
+      # Uncomment this section if you have stored your signing keys in GitHub Secrets
+      # - name: Configure signing credentials
+      #   env:
+      #     KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+      #     KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      #     KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      #     KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      #   run: |
+      #     echo "$KEYSTORE_FILE" | base64 --decode > app/keystore.jks
+      #     echo "storeFile=keystore.jks" >> local.properties
+      #     echo "storePassword=$KEYSTORE_PASSWORD" >> local.properties
+      #     echo "keyAlias=$KEY_ALIAS" >> local.properties
+      #     echo "keyPassword=$KEY_PASSWORD" >> local.properties
+
+      # 4. Grant execute permission to Gradle wrapper
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 5. Build both APK and AAB
+      - name: Build APK (Debug) and AAB (Release)
+        run: ./gradlew assembleDebug bundleRelease
+
+      # 6. Prepare output directory and rename files
+      - name: Prepare output files
+        run: |
+          mkdir -p Build_Output
+          cp $APK_DEBUG_PATH Build_Output/BedrockLauncher_v${{ github.sha }}.apk
+          cp $AAB_RELEASE_PATH Build_Output/BedrockLauncher_v${{ github.sha }}.aab
+
+      # 7. Create ZIP archive
+      - name: Compress output to ZIP
+        run: zip -r BedrockLauncher_Build_Output.zip Build_Output/
+
+      # 8. Upload ZIP as artifact
+      - name: Upload build output ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: BedrockLauncher_Build_Output
+          path: BedrockLauncher_Build_Output.zip
