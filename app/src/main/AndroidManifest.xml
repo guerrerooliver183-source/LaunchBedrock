@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -34,6 +35,11 @@
             android:name=".UpdateInfoActivity"
             android:label="Update Information"
             android:parentActivityName=".MainActivity" />
+
+        <service
+            android:name=".OverlayService"
+            android:enabled="true"
+            android:exported="false" />
 
         <receiver
             android:name=".DeviceAdminReceiver"

@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private CardView notificationCard;
     private SharedPreferences prefs;
     private final String MINECRAFT_TRIAL_PKG = "com.mojang.minecrafttrialpe";
+    private String latestDownloadUrl;
+    private Bundle latestUpdateData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_TRIAL_PKG);
         if (intent != null) {
             startActivity(intent);
+            // Si hay una actualización pendiente, mostrar el overlay sobre el juego
+            if (latestUpdateData != null) {
+                if (android.provider.Settings.canDrawOverlays(this)) {
+                    Intent overlayIntent = new Intent(this, OverlayService.class);
+                    overlayIntent.putExtras(latestUpdateData);
+                    startService(overlayIntent);
+                } else {
+                    // Solicitar permiso si no lo tiene
+                    Intent overlayPermIntent = new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            android.net.Uri.parse("package:" + getPackageName()));
+                    startActivity(overlayPermIntent);
+                }
+            }
         } else {
             Toast.makeText(this, "Could not launch Minecraft", Toast.LENGTH_SHORT).show();
         }
@@ -147,12 +162,15 @@ public class MainActivity extends AppCompatActivity {
         fadeIn.setDuration(500);
         notificationCard.startAnimation(fadeIn);
 
+        latestUpdateData = new Bundle();
+        latestUpdateData.putString("version", version);
+        latestUpdateData.putString("date", date);
+        latestUpdateData.putString("changelog", changelog);
+        latestUpdateData.putString("download_url", downloadUrl);
+
         notificationCard.setOnClickListener(v -> {
             Intent intent = new Intent(this, UpdateInfoActivity.class);
-            intent.putExtra("version", version);
-            intent.putExtra("date", date);
-            intent.putExtra("changelog", changelog);
-            intent.putExtra("download_url", downloadUrl);
+            intent.putExtras(latestUpdateData);
             startActivity(intent);
         });
 
