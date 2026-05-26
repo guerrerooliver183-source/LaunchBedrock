@@ -149,14 +149,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void showMinecraftNotFoundDialog() {
         new AlertDialog.Builder(this)
-            .setTitle("Minecraft Not Found")
-            .setMessage("Neither Minecraft Trial nor Full Version was found. Please download one.")
-            .setPositiveButton("Download Trial", (d, w) -> {
+            .setTitle("Minecraft Trial Not Found")
+            .setMessage(R.string.trial_not_installed)
+            .setPositiveButton("Install Minecraft Trial", (d, w) -> {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MINECRAFT_TRIAL_PKG)));
             })
-            .setNegativeButton("Download Full", (d, w) -> {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MINECRAFT_FULL_PKG)));
-            })
+            .setNegativeButton("Exit", (d, w) -> finish())
             .show();
     }
 
