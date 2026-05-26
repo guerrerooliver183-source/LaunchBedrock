@@ -17,10 +17,10 @@
     <color name="md_theme_onError">#FFFFFF</color>
     <color name="md_theme_errorContainer">#FFDAD6</color>
     <color name="md_theme_onErrorContainer">#410002</color>
-    <color name="md_theme_background">#FAFDFB</color>
-    <color name="md_theme_onBackground">#191C1B</color>
-    <color name="md_theme_surface">#FAFDFB</color>
-    <color name="md_theme_onSurface">#191C1B</color>
+    <color name="md_theme_background">#000000</color>
+    <color name="md_theme_onBackground">#FFFFFF</color>
+    <color name="md_theme_surface">#000000</color>
+    <color name="md_theme_onSurface">#FFFFFF</color>
     <color name="md_theme_surfaceVariant">#DAE5E2</color>
     <color name="md_theme_onSurfaceVariant">#3F4947</color>
     <color name="md_theme_outline">#6F7977</color>
@@ -31,10 +31,11 @@
     <color name="md_theme_surfaceTint">#006A60</color>
 
     <!-- Colores adicionales para la barra de progreso y otros elementos -->
-    <color name="progress_segment_1">#4CAF50</color>
-    <color name="progress_segment_2">#FFC107</color>
-    <color name="progress_segment_3">#2196F3</color>
-    <color name="progress_segment_4">#F44336</color>
+    <color name="progress_segment_1">#C0C97F</color>
+    <color name="progress_segment_2">#C0C97F</color>
+    <color name="progress_segment_3">#C0C97F</color>
+    <color name="progress_segment_4">#C0C97F</color>
+    <color name="progress_bg">#333333</color>
 
     <!-- Colores básicos -->
     <color name="black">#FF000000</color>

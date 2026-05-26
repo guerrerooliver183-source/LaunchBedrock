@@ -87,10 +87,12 @@ public class MainActivity extends AppCompatActivity {
     private void startLoadingSequence() {
         Handler handler = new Handler(Looper.getMainLooper());
 
+        // Inicialmente mostramos el primer segmento para dar feedback
+        progress1.setVisibility(View.VISIBLE);
+
         // Etapa 1: Checking for updates (2 segundos)
         handler.postDelayed(() -> {
             statusText.setText(R.string.starting_minecraft);
-            progress1.setVisibility(View.VISIBLE);
             progress2.setVisibility(View.VISIBLE);
         }, 2000);
 

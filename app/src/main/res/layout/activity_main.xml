@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="#000000"
     tools:context=".MainActivity">
 
-    <!-- Notificación emergente (inicialmente oculta) -->
+    <!-- Notificación emergente -->
     <androidx.cardview.widget.CardView
         android:id="@+id/notification_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:visibility="gone"
+        app:cardBackgroundColor="#1A1A1A"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,39 +27,60 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="@string/new_update_available"
+            android:textColor="#FFFFFF"
             android:textAppearance="?attr/textAppearanceBodyMedium" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Logo de Minecraft -->
-    <ImageView
-        android:id="@+id/minecraft_logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="100dp"
-        android:src="@mipmap/ic_launcher"
+    <!-- Contenedor Logo + Título -->
+    <LinearLayout
+        android:id="@+id/logo_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4">
+
+        <ImageView
+            android:id="@+id/minecraft_logo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Minecraft"
+            android:textColor="#FFFFFF"
+            android:textSize="64sp"
+            android:fontFamily="sans-serif-light" />
+    </LinearLayout>
 
     <!-- Texto de estado -->
     <TextView
         android:id="@+id/status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/checking_updates"
-        android:textAppearance="?attr/textAppearanceTitleMedium"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/starting_minecraft"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minecraft_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/logo_container" />
 
-    <!-- Barra de progreso segmentada -->
+    <!-- Barra de progreso segmentada estilo Geode -->
     <LinearLayout
         android:id="@+id/progress_container"
         android:layout_width="0dp"
-        android:layout_height="16dp"
+        android:layout_height="4dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,6 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginEnd="4dp"
             android:background="@color/progress_segment_1"
             android:visibility="invisible" />
 
@@ -78,6 +101,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginEnd="4dp"
             android:background="@color/progress_segment_2"
             android:visibility="invisible" />
 
@@ -86,6 +110,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginEnd="4dp"
             android:background="@color/progress_segment_3"
             android:visibility="invisible" />
 
@@ -99,26 +124,32 @@
     </LinearLayout>
 
     <!-- Botón Cancelar -->
-    <Button
+    <TextView
         android:id="@+id/btn_cancel"
-        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/cancel"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="48dp"
+        android:text="Cancel"
+        android:textColor="#C0C97F"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Botón Ajustes -->
-    <ImageButton
+    <ImageView
         android:id="@+id/btn_settings"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="48dp"
         android:src="@android:drawable/ic_menu_preferences"
+        app:tint="#FFFFFF"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
