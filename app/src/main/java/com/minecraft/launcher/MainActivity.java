@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private CardView notificationCard;
     private SharedPreferences prefs;
     private final String MINECRAFT_TRIAL_PKG = "com.mojang.minecrafttrialpe";
-    private final String MINECRAFT_FULL_PKG = "com.mojang.minecraftpe";
     private String latestDownloadUrl;
     private Bundle latestUpdateData;
 
@@ -118,31 +117,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchMinecraft() {
-        // 1. Verificar si la versión completa está instalada
-        if (SecurityUtils.isPackageInstalled(this, MINECRAFT_FULL_PKG)) {
-            Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_FULL_PKG);
-            if (intent != null) {
-                Toast.makeText(this, "Opening Minecraft Full Version...", Toast.LENGTH_SHORT).show();
-                startActivity(intent);
-                if (latestUpdateData != null) showNotificationOverlay();
-                return;
-            }
-        }
-
-        // 2. Si no está la completa, intentar inyectar Minecraft Trial
+        // Intentar inyectar y cargar Minecraft Trial (Exclusivo)
         boolean success = com.minecraft.launcher.utils.MinecraftLoader.injectMinecraft(this);
         
         if (success) {
             Toast.makeText(this, "Minecraft Trial Injected Successfully!", Toast.LENGTH_SHORT).show();
             if (latestUpdateData != null) showNotificationOverlay();
         } else {
-            // 3. Fallback: Lanzamiento tradicional de Trial si la inyección falla
+            // Fallback: Lanzamiento tradicional de Trial si la inyección falla
             Intent intent = getPackageManager().getLaunchIntentForPackage(MINECRAFT_TRIAL_PKG);
             if (intent != null) {
                 startActivity(intent);
                 if (latestUpdateData != null) showNotificationOverlay();
             } else {
-                // 4. Si nada está instalado, mostrar aviso
+                // Si no está instalado, mostrar aviso de descarga
                 showMinecraftNotFoundDialog();
             }
         }
@@ -150,14 +138,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void showMinecraftNotFoundDialog() {
         new AlertDialog.Builder(this)
-            .setTitle("Minecraft Not Found")
-            .setMessage("Neither Minecraft Trial nor Full Version was found. Please download one.")
-            .setPositiveButton("Download Trial", (d, w) -> {
+            .setTitle("Minecraft Trial Not Found")
+            .setMessage(R.string.trial_not_installed)
+            .setPositiveButton("Download", (d, w) -> {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MINECRAFT_TRIAL_PKG)));
             })
-            .setNegativeButton("Download Full", (d, w) -> {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MINECRAFT_FULL_PKG)));
-            })
+            .setNegativeButton("Exit", (d, w) -> finish())
             .show();
     }
 
